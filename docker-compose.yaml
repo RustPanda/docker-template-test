@@ -1,0 +1,7 @@
+services:
+  example:
+    build: ./
+    image: docker-template-test
+    environment:
+      - EXAMPLE={{.Service.Name}}
+      
