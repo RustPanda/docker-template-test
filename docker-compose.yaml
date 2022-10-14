@@ -1,7 +1,7 @@
 version: "3"
 services:
   example:
-    image: docker-template-test:latest
+    image: ghcr.io/rustpanda/docker-template-test:main
     environment:
       - NODE_ID={{.Node.ID}}
       - NODE_HOSTNAME={{.Node.Hostname}}
