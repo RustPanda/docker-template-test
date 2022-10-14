@@ -1,6 +1,8 @@
 FROM rust:alpine AS builder
 
 COPY . .
+
+RUN apk add build-base
 RUN cargo build --release
 
 FROM scratch

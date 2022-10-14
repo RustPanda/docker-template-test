@@ -1,7 +1,10 @@
+version: "3"
 services:
   example:
-    build: ./
-    image: docker-template-test
+    image: docker-template-test:latest
     environment:
-      - EXAMPLE={{.Service.Name}}
+      - NODE_ID={{.Node.ID}}
+      - NODE_HOSTNAME={{.Node.Hostname}}
+    ports:
+      - 8000:8080
       
