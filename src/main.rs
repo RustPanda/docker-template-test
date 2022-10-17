@@ -1,6 +1,6 @@
 use std::collections::BTreeMap;
 
-use axum::{routing::get, Router};
+use axum::{routing::get, Json, Router};
 use tokio::signal;
 
 #[tokio::main]
@@ -9,9 +9,7 @@ async fn main() {
 
     let app = Router::new().route(
         "/",
-        get(|| async {
-            json::stringify_pretty(std::env::vars().collect::<BTreeMap<String, String>>(), 2)
-        }),
+        get(|| async { Json(std::env::vars().collect::<BTreeMap<String, String>>()) }),
     );
 
     axum::Server::from_tcp(tcp_listener)
