@@ -6,5 +6,20 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-axum = "0.5.16"
 tokio = { version = "1.21.2", features = ["rt-multi-thread", "macros", "signal"] }
+xitca-web = { git = "https://github.com/HFQR/xitca-web.git", version = "0.1.0", features = ["json"] }
+
+
+[patch.crates-io]
+xitca-client = { git = "https://github.com/HFQR/xitca-web.git" }
+xitca-codegen = { git = "https://github.com/HFQR/xitca-web.git" }
+xitca-http = { git = "https://github.com/HFQR/xitca-web.git" }
+xitca-io = { git = "https://github.com/HFQR/xitca-web.git" }
+xitca-postgres = { git = "https://github.com/HFQR/xitca-web.git" }
+xitca-server = { git = "https://github.com/HFQR/xitca-web.git" }
+xitca-service = { git = "https://github.com/HFQR/xitca-web.git" }
+xitca-web = { git = "https://github.com/HFQR/xitca-web.git" }
+xitca-unsafe-collection = { git = "https://github.com/HFQR/xitca-web.git" }
+http-encoding = { git = "https://github.com/HFQR/xitca-web.git" }
+http-multipart = { git = "https://github.com/HFQR/xitca-web.git" }
+http-ws = { git = "https://github.com/HFQR/xitca-web.git" } 

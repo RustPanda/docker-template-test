@@ -1,47 +1,27 @@
 use std::collections::BTreeMap;
 
-use axum::{routing::get, Json, Router};
-use tokio::signal;
+use xitca_web::{
+    handler::{handler_service, json::Json},
+    route::get,
+    App, HttpServer,
+};
 
 #[tokio::main]
-async fn main() {
-    let tcp_listener = std::net::TcpListener::bind("0.0.0.0:8080").unwrap();
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let tcp_listener = std::net::TcpListener::bind("0.0.0.0:8080")?;
 
-    let app = Router::new().route(
-        "/",
-        get(|| async { Json(std::env::vars().collect::<BTreeMap<String, String>>()) }),
-    );
-
-    axum::Server::from_tcp(tcp_listener)
-        .unwrap()
-        .serve(app.into_make_service())
-        .with_graceful_shutdown(shutdown_signal())
-        .await
-        .unwrap();
-}
-
-async fn shutdown_signal() {
-    let ctrl_c = async {
-        signal::ctrl_c()
-            .await
-            .expect("failed to install Ctrl+C handler");
-    };
-
-    #[cfg(unix)]
-    let terminate = async {
-        signal::unix::signal(signal::unix::SignalKind::terminate())
-            .expect("failed to install signal handler")
-            .recv()
-            .await;
-    };
-
-    #[cfg(not(unix))]
-    let terminate = std::future::pending::<()>();
-
-    tokio::select! {
-        _ = ctrl_c => {},
-        _ = terminate => {},
-    }
-
-    println!("signal received, starting graceful shutdown");
+    HttpServer::new(|| {
+        App::new()
+            .at(
+                "/",
+                get(handler_service(|| async {
+                    Json::<_>(std::env::vars().collect::<BTreeMap<String, String>>())
+                })),
+            )
+            .finish()
+    })
+    .listen(tcp_listener)?
+    .run()
+    .await
+    .map_err(Into::into)
 }
