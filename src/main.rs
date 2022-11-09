@@ -1,14 +1,19 @@
 use std::collections::BTreeMap;
 
+use owo_colors::OwoColorize;
 use xitca_web::{
     handler::{handler_service, json::Json},
     route::get,
     App, HttpServer,
 };
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let tcp_listener = std::net::TcpListener::bind("0.0.0.0:8080")?;
+
+    println!(
+        "Server up on: {} 🚀",
+        tcp_listener.local_addr().unwrap().green()
+    );
 
     HttpServer::new(|| {
         App::new()
@@ -22,6 +27,6 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     })
     .listen(tcp_listener)?
     .run()
-    .await
+    .wait()
     .map_err(Into::into)
 }
